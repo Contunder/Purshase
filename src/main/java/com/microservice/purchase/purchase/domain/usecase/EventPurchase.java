@@ -4,10 +4,11 @@ package com.microservice.purchase.purchase.domain.usecase;
 import com.microservice.purchase.purchase.domain.entities.Purchase;
 import com.microservice.purchase.purchase.domain.gateway.PurchaseDTO;
 import com.microservice.purchase.purchase.domain.gateway.TrackingDTO;
-import com.microservice.purchase.purchase.domain.gateway.UserDetailsDto;
 import com.microservice.purchase.purchase.domain.mapper.JsonBodyHandler;
 import com.microservice.purchase.purchase.domain.mapper.PurchaseMapper;
+import com.microservice.purchase.purchase.domain.mapper.TrackingMapper;
 import com.microservice.purchase.purchase.domain.ports.PurchasePorts;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ public class EventPurchase {
 
     private final PurchaseMapper purchaseMapper;
     private final PurchasePorts purchasePorts;
+    private final TrackingMapper trackingMapper;
     private final HttpClient client;
 
     @Value("${tracking.add}")
@@ -27,6 +29,7 @@ public class EventPurchase {
 
     public EventPurchase(PurchasePorts purchasePorts) {
         this.purchasePorts = purchasePorts;
+        this.trackingMapper = new TrackingMapper();
         this.purchaseMapper = new PurchaseMapper();
         this.client = HttpClient.newHttpClient();
     }
@@ -40,9 +43,9 @@ public class EventPurchase {
         HttpRequest getUserDetails = HttpRequest.newBuilder(
                         URI.create(trackingURL)
                 )
-                .header("accept", "application/json")
+                .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + token)
-                .POST((HttpRequest.BodyPublisher) purchase)
+                .POST(HttpRequest.BodyPublishers.ofString(new JSONObject(trackingMapper.mapToDto(purchase)).toString()))
                 .build();
 
         client.sendAsync(getUserDetails, new JsonBodyHandler<>(TrackingDTO.class));

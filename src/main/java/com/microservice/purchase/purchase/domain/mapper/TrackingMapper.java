@@ -6,9 +6,9 @@ import com.microservice.purchase.purchase.domain.gateway.TrackingDTO;
 
 public class TrackingMapper {
 
-    public TrackingDTO mapToDto(Purchase purchase, String email) {
+    public TrackingDTO mapToDto(Purchase purchase) {
         return TrackingDTO.builder()
-                .email(email)
+                .email(purchase.getEmail())
                 .createType("Purchase Ticket")
                 .createId(purchase.getId())
                 .build();
