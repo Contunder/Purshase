@@ -36,7 +36,7 @@ public class PurchaseController {
         jwtTokenProvider.validateToken(token);
         String email = jwtTokenProvider.getUsername(token);
 
-        return new ResponseEntity<>(eventPurchase.execute(purchaseDTO, email), HttpStatus.CREATED);
+        return new ResponseEntity<>(eventPurchase.execute(purchaseDTO, email, token), HttpStatus.CREATED);
     }
 
 }
