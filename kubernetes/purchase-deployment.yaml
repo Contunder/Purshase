@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: purchase
+  labels:
+    app: purchase
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: purchase
+  template:
+    metadata:
+      labels:
+        app: purchase
+    spec:
+      containers:
+        - name: purchase
+          image: valden01/purchase:latest
+          ports:
+            - name: http
+              containerPort: 8082
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: purchase
+  labels:
+    app: purchase
+spec:
+  type: LoadBalancer
+  selector:
+    app: purchase
+  ports:
+    - protocol: TCP
+      name: http
+      port: 8082
+      targetPort: 8082
+      nodePort: 30000
