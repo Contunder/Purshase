@@ -15,4 +15,12 @@ public class PurchaseMapper {
                 .build();
     }
 
+    public PurchaseDTO mapToDto(Purchase purchase) {
+        return PurchaseDTO.builder()
+                .event(purchase.getEvent())
+                .eventDate(purchase.getEventDate())
+                .amount(purchase.getAmount())
+                .build();
+    }
+
 }

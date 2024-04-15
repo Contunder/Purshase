@@ -6,10 +6,10 @@ import com.microservice.purchase.purchase.domain.gateway.TrackingDTO;
 
 public class TrackingMapper {
 
-    public TrackingDTO mapToDto(Purchase purchase) {
+    public TrackingDTO mapToDto(Purchase purchase, String eventType) {
         return TrackingDTO.builder()
                 .email(purchase.getEmail())
-                .createType("Purchase Ticket")
+                .createType(eventType)
                 .createId(purchase.getId())
                 .build();
     }
