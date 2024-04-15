@@ -1,6 +1,7 @@
 package com.microservice.purchase.purchase.application;
 
 import com.microservice.purchase.purchase.domain.gateway.PurchaseDTO;
+import com.microservice.purchase.purchase.domain.gateway.PurchaseListDTO;
 import com.microservice.purchase.purchase.domain.usecase.EventPurchase;
 import com.microservice.purchase.purchase.domain.usecase.UserEvent;
 import com.microservice.purchase.purchase.domain.usecase.ViewEvent;
@@ -57,7 +58,7 @@ public class PurchaseController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<PurchaseDTO>> purchaseUserEvent(
+    public ResponseEntity<PurchaseListDTO> purchaseUserEvent(
             HttpServletRequest request
     ) {
         String token = jwtAuthenticationFilter.getTokenFromRequest(request);

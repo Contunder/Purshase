@@ -4,6 +4,7 @@ package com.microservice.purchase.purchase.domain.usecase;
 import com.microservice.purchase.exception.AccountAPIException;
 import com.microservice.purchase.purchase.domain.entities.Purchase;
 import com.microservice.purchase.purchase.domain.gateway.PurchaseDTO;
+import com.microservice.purchase.purchase.domain.gateway.PurchaseListDTO;
 import com.microservice.purchase.purchase.domain.mapper.PurchaseMapper;
 import com.microservice.purchase.purchase.domain.ports.PurchasePorts;
 import org.springframework.http.HttpStatus;
@@ -22,15 +23,16 @@ public class UserEvent {
         this.purchaseMapper = new PurchaseMapper();
     }
 
-    public List<PurchaseDTO> execute(String email) {
+    public PurchaseListDTO execute(String email) {
 
         List<Purchase> purchases = purchasePorts.findByEmail(email).orElseThrow(
                 () ->  new AccountAPIException(HttpStatus.NOT_FOUND, "User not found with email: " + email)
         );
 
-        return purchases.stream()
+        return new PurchaseListDTO(purchases.stream()
                 .map(purchaseMapper::mapToDto)
-                .toList();
+                .toList()
+        );
     }
 
 }
